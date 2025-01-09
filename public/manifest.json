@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "my-extension",
+  "version": "1.0.0",
+  "description": "",
+  "permissions": ["scripting", "sidePanel"],
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "action": {
+    "default_title": "Open Side Panel"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
