@@ -156,7 +156,7 @@ const MainPage = () => {
         />
         <button
           onClick={handleAddUrl}
-          className='bg-white rounded-3xl w-10 h-10 text-sm flex-shrink-0'
+          className='bg-white rounded-3xl w-10 h-10 text-sm flex-shrink-0 active:bg-[#E5E5F0]'
           style={{
             boxShadow:
               '0px 2px 8px 0px rgba(40, 41, 61, 0.08), 0px 20px 32px 0px rgba(96, 97, 112, 0.24)',
@@ -182,7 +182,7 @@ const MainPage = () => {
       </div>
       <div className='mt-auto flex flex-col items-center gap-4'>
         <button
-          className='bg-white rounded-3xl w-28 h-10 text-sm'
+          className='bg-white rounded-3xl w-28 h-10 text-sm active:bg-[#E5E5F0]'
           onClick={handleBlock}
           style={{
             boxShadow:
@@ -193,7 +193,7 @@ const MainPage = () => {
         </button>
         <div className='flex justify-between w-full'>
           <button
-            className='bg-white rounded-3xl w-28 h-10 text-sm'
+            className='bg-white rounded-3xl w-28 h-10 text-sm active:bg-[#E5E5F0]'
             onClick={() =>
               chrome.tabs.create({ url: 'http://localhost:5174/photo' })
             }
@@ -205,7 +205,7 @@ const MainPage = () => {
             차단 해제
           </button>
           <button
-            className='bg-white rounded-3xl w-28 h-10 text-sm'
+            className='bg-white rounded-3xl w-28 h-10 text-sm active:bg-[#E5E5F0]'
             onClick={() =>
               chrome.tabs.create({ url: 'http://localhost:5174/#stats' })
             }
