@@ -3,7 +3,7 @@
   "name": "FOCUS",
   "version": "1.0.0",
   "description": "",
-  "permissions": ["scripting", "sidePanel"],
+  "permissions": ["scripting", "sidePanel", "storage"],
   "host_permissions": ["https://*/*", "http://*/*"],
   "side_panel": {
     "default_path": "index.html"
@@ -13,5 +13,11 @@
   },
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://localhost:5174/*"],
+      "js": ["content.js"]
+    }
+  ]
 }
