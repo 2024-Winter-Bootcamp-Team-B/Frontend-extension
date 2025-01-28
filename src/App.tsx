@@ -88,9 +88,13 @@ const App = () => {
       .then((response) => {
         if (response) {
           console.log(response);
+          alert('차단이 되었습니다.');
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        alert('오류가 발생하였습니다. 다시 시도해주세요.');
+      });
   };
 
   return (
