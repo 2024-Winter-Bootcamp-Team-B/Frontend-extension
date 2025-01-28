@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "description": "DB에 저장된 사이트를 차단하는 Chrome 확장 프로그램",
   "permissions": [
-    "scripting", 
-    "sidePanel", 
-    "storage", 
-    "declarativeNetRequest", 
+    "scripting",
+    "sidePanel",
+    "storage",
+    "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess"
   ],
   "host_permissions": ["https://*/*", "http://*/*", "*://*/*"],
@@ -27,7 +27,3 @@
     }
   ]
 }
-
-
-
-
