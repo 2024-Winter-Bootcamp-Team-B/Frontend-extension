@@ -4,6 +4,7 @@ import jail from './assets/jail.svg';
 import dayjs from 'dayjs';
 import TimePicker from 'react-time-picker';
 import axios from 'axios';
+import { fetchMostBlocked } from './api/mostBlocked';
 
 const App = () => {
   const today = dayjs().format('YYYY년 MM월 DD일'); // dayjs 라이브러리로 오늘 날짜 가져오기
@@ -16,6 +17,7 @@ const App = () => {
   );
   const [urlInput, setUrlInput] = useState<string>('');
   const [urlList, setUrlList] = useState<{ url: string; name: string }[]>([]);
+  const [mostBlocked, setMostBlocked] = useState<string[]>([]);
 
   const handleStartTimeChange = (value: string | null) => {
     setStartTime(value || dayjs().format('HH:mm'));
@@ -97,6 +99,44 @@ const App = () => {
       });
   };
 
+  // 최고 빈도 사이트 5개 API
+  useEffect(() => {
+    fetchMostBlocked()
+      .then((response) => {
+        if (response?.result && Array.isArray(response.result)) {
+          setMostBlocked(response.result);
+        }
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  // 드래그 시작 핸들러
+  const handleDragStart = (
+    e: React.DragEvent<HTMLImageElement>,
+    url: string,
+  ) => {
+    e.dataTransfer.setData('text/plain', url);
+  };
+
+  // 드롭 핸들러
+  const handleDrop = (e: React.DragEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const droppedUrl = e.dataTransfer.getData('text/plain');
+    if (droppedUrl) {
+      fetchSiteName(droppedUrl).then((siteName) => {
+        setUrlList((prevList) => [
+          ...prevList,
+          { url: droppedUrl, name: siteName },
+        ]);
+      });
+    }
+  };
+
+  // 드래그 오버 핸들러
+  const handleDragOver = (e: React.DragEvent<HTMLInputElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <div className='flex flex-col h-full w-full p-4 items-center gap-2'>
       <div className='flex items-center justify-between w-full'>
@@ -147,12 +187,14 @@ const App = () => {
           minutePlaceholder='00'
         />
       </div>
-      <p>URL을 입력하세요</p>
+      <p>URL을 입력하거나 아이콘을 드래그하세요</p>
       <div className='flex gap-4 w-full'>
         <input
           type='url'
           value={urlInput}
           onChange={handleUrlChange}
+          onDrop={handleDrop} // 드롭 이벤트 처리
+          onDragOver={handleDragOver} // 드래그 오버 이벤트 처리
           placeholder='예: www.focus-on-site.com'
           className='h-10 p-5 placeholder:text-center flex-grow'
           style={{
@@ -171,6 +213,16 @@ const App = () => {
         >
           추가
         </button>
+      </div>
+      <div className='flex justify-between bg-[#F5F5FA] p-3 self-center rounded-[30px] w-full'>
+        {mostBlocked.map((site, index) => (
+          <img
+            key={index}
+            src={`https://www.google.com/s2/favicons?sz=32&domain_url=${site}`}
+            draggable
+            onDragStart={(e) => handleDragStart(e, site)} // 드래그 시작 이벤트
+          />
+        ))}
       </div>
       <div className='w-full'>
         <ul className='flex flex-wrap gap-4 w-full justify-start'>
