@@ -153,7 +153,7 @@ const App = () => {
           type='url'
           value={urlInput}
           onChange={handleUrlChange}
-          placeholder='URL 예시'
+          placeholder='예: www.focus-on-site.com'
           className='h-10 p-5 placeholder:text-center flex-grow'
           style={{
             boxShadow:
