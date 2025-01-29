@@ -3,6 +3,12 @@
   "name": "FOCUS",
   "version": "1.0.0",
   "description": "DB에 저장된 사이트를 차단하는 Chrome 확장 프로그램",
+  "icons": {
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
   "permissions": [
     "scripting",
     "sidePanel",
@@ -22,7 +28,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://localhost:5174/*"],
+      "matches": ["http://localhost:5173/*"],
       "js": ["content.js"]
     }
   ]

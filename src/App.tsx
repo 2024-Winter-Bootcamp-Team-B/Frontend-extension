@@ -115,7 +115,7 @@ const App = () => {
           <button
             className='text-xl'
             onClick={() =>
-              chrome.tabs.create({ url: 'http://localhost:5174/login' })
+              chrome.tabs.create({ url: 'http://localhost:5173/login' })
             }
           >
             LOGIN
@@ -202,7 +202,7 @@ const App = () => {
           <button
             className='bg-white rounded-3xl w-28 h-10 text-sm active:bg-[#E5E5F0]'
             onClick={() =>
-              chrome.tabs.create({ url: 'http://localhost:5174/photo' })
+              chrome.tabs.create({ url: 'http://localhost:5173/photo' })
             }
             style={{
               boxShadow:
@@ -214,7 +214,7 @@ const App = () => {
           <button
             className='bg-white rounded-3xl w-28 h-10 text-sm active:bg-[#E5E5F0]'
             onClick={() =>
-              chrome.tabs.create({ url: 'http://localhost:5174/#stats' })
+              chrome.tabs.create({ url: 'http://localhost:5173/#stats' })
             }
             style={{
               boxShadow:
