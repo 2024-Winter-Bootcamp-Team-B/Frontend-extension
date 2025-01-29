@@ -114,11 +114,11 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-// 주기적으로 차단 목록 업데이트 (18초 간격)
+// 차단 목록 업데이트
 setInterval(() => {
   if (user_id) {
     fetchBlockedSites(user_id);
   } else {
     console.warn('User ID is not set. Skipping scheduled fetchBlockedSites.');
   }
-}, 18000);
+}, 180);
