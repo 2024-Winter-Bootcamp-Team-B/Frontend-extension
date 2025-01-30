@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { BlockReq, blockSites } from './api/block';
 import jail from './assets/jail.svg';
 import dayjs from 'dayjs';
-import TimePicker from 'react-time-picker';
+import { TimePicker } from 'rsuite';
 import axios from 'axios';
 import { fetchMostBlocked } from './api/mostBlocked';
 
@@ -11,20 +11,18 @@ const App = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [startTime, setStartTime] = useState<string>(dayjs().format('HH:mm'));
-  const [goalTime, setGoalTime] = useState<string>(
-    dayjs().add(1, 'hour').format('HH:mm'),
-  );
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [goalTime, setGoalTime] = useState<Date | null>(null);
   const [urlInput, setUrlInput] = useState<string>('');
   const [urlList, setUrlList] = useState<{ url: string; name: string }[]>([]);
   const [mostBlocked, setMostBlocked] = useState<string[]>([]);
 
-  const handleStartTimeChange = (value: string | null) => {
-    setStartTime(value || dayjs().format('HH:mm'));
+  const handleStartTimeChange = (value: Date | null) => {
+    setStartTime(value || null);
   };
 
-  const handleGoalTimeChange = (value: string | null) => {
-    setGoalTime(value || dayjs().add(1, 'hour').format('HH:mm'));
+  const handleGoalTimeChange = (value: Date | null) => {
+    setGoalTime(value || null);
   };
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,27 +162,21 @@ const App = () => {
       </div>
       <p className='text-xl'>{today}</p>
       <p>시간을 입력하세요</p>
-      <div className='font-abril flex text-xl gap-8'>
+      <div className='font-abril flex items-center text-xl gap-8'>
         <TimePicker
           onChange={handleStartTimeChange}
           value={startTime}
-          disableClock={true}
-          clearIcon={null}
-          format='HH:mm'
-          className='w-[100px]'
-          hourPlaceholder='00'
-          minutePlaceholder='00'
+          cleanable={false}
+          size='sm'
+          placeholder=''
         />
         <p>~</p>
         <TimePicker
           onChange={handleGoalTimeChange}
           value={goalTime}
-          disableClock={true}
-          clearIcon={null}
-          format='HH:mm'
-          className='w-[100px]'
-          hourPlaceholder='00'
-          minutePlaceholder='00'
+          cleanable={false}
+          size='sm'
+          placeholder=''
         />
       </div>
       <p>URL을 입력하거나 아이콘을 드래그하세요</p>
