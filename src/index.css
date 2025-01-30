@@ -2,15 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 입력 필드와 선행 0을 포함한 스타일 */
-.react-time-picker__inputGroup__leadingZero,
-.react-time-picker__inputGroup__input {
-  background-color: transparent; /* 배경 투명 */
+/* rs-picker-input-group: 입력 필드 컨테이너 */
+.rs-picker-input-group {
+  background: white !important; /* 배경색 흰색 */
+  border-radius: 50px !important; /* 둥근 테두리 */
+  padding: 10px 0px !important; /* 내부 여백 추가 */
+  box-shadow:
+    -5px -5px 8px 0px rgba(239, 237, 225, 0.5) inset,
+    5px 5px 8px 0px rgba(170, 170, 204, 0.25) inset,
+    7px 7px 13px 0px rgba(170, 170, 204, 0.5) inset,
+    -7px -7px 13px 0px #fff inset !important; /* 부드러운 그림자 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100% !important; /* 전체 너비 유지 */
 }
 
-/* 입력 필드와 선행 0 정렬하기 */
-.react-time-picker__inputGroup {
-  display: flex;
-  align-items: center; /* 세로 중앙 정렬 */
-  justify-content: center; /* 가로 중앙 정렬 */
+/* 입력 필드 스타일 */
+.rs-picker-input-group .rs-input {
+  font-size: 20px !important; /* 글씨 크기 */
+  text-align: center !important; /* 중앙 정렬 */
+  line-height: normal !important;
+  background: transparent !important; /* 배경 투명 (부모가 흰색이므로 투명 유지) */
+  width: 100px !important;
+  border: none !important; /* 테두리 제거 */
+  color: gray !important; /* 기본 상태 회색 */
+}
+
+/* 입력 필드 - 사용자가 입력하면 검정색 */
+.rs-picker-input-group .rs-input:focus,
+.rs-picker-input-group .rs-input:not(:placeholder-shown) {
+  color: black !important;
+}
+
+/* 아이콘 스타일 숨기기 */
+.rs-picker-input-group .rs-input-group-addon {
+  display: none !important;
+}
+
+.rs-picker-popup {
+  display: none !important;
 }
