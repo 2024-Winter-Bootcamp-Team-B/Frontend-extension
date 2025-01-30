@@ -114,11 +114,20 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-// 차단 목록 업데이트
-setInterval(() => {
-  if (user_id) {
-    fetchBlockedSites(user_id);
-  } else {
-    console.warn('User ID is not set. Skipping scheduled fetchBlockedSites.');
+// 차단 목록 업데이트 (user_id를 Chrome Storage에서 가져와서 사용)
+setInterval(async () => {
+  try {
+    chrome.storage.local.get(['user_id'], (result) => {
+      if (result && result.user_id) {
+        console.log(`User ID retrieved: ${result.user_id}`);
+        fetchBlockedSites(result.user_id); // 정상적인 방식으로 user_id 전달
+      } else {
+        console.warn(
+          'User ID is not set. Skipping scheduled fetchBlockedSites.',
+        );
+      }
+    });
+  } catch (error) {
+    console.error('Error retrieving user_id from Chrome storage:', error);
   }
-}, 180);
+}, 1800);
