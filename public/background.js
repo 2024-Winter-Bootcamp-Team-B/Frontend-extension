@@ -1,3 +1,6 @@
+// 사용자 ID (동적으로 차단할 사용자 설정)
+// const user_id = 1;
+
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
   .catch((error) => console.error(error));
@@ -114,11 +117,22 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-// 차단 목록 업데이트
-setInterval(() => {
-  if (user_id) {
-    fetchBlockedSites(user_id);
-  } else {
-    console.warn('User ID is not set. Skipping scheduled fetchBlockedSites.');
-  }
-}, 180);
+// // 확장 프로그램 설치 시 초기화
+// chrome.runtime.onInstalled.addListener(() => {
+//   console.log("Site Blocker extension installed");
+//   fetchBlockedSites(1); // 차단 목록 가져오기 및 규칙 추가
+// });
+
+// // 차단 목록 업데이트
+// setInterval(() => {
+//   if (user_id) {
+//     fetchBlockedSites(user_id);
+//   } else {
+//     console.warn('User ID is not set. Skipping scheduled fetchBlockedSites.');
+//   }
+// }, 180);
+
+
+
+// 주기적으로 차단 목록 업데이트 (1.8초 간격)
+setInterval(() => fetchBlockedSites(1), 1800);
