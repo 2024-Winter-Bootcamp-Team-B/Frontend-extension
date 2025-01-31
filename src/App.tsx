@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import TimePicker from 'react-time-picker';
 import axios from 'axios';
 import { fetchMostBlocked } from './api/mostBlocked';
+import { checkBlock, checkReq } from './api/checkBlock';
 
 const App = () => {
   const today = dayjs().format('YYYY년 MM월 DD일'); // dayjs 라이브러리로 오늘 날짜 가져오기
@@ -18,6 +19,13 @@ const App = () => {
   const [urlInput, setUrlInput] = useState<string>('');
   const [urlList, setUrlList] = useState<{ url: string; name: string }[]>([]);
   const [mostBlocked, setMostBlocked] = useState<string[]>([]);
+  const [blockedSites, setBlockedSites] = useState<string[]>([]); // 차단된 사이트 목록
+  const [iconPositions, setIconPositions] = useState<
+    { x: number; y: number }[]
+  >([]);
+  const [iconVelocities, setIconVelocities] = useState<
+    { dx: number; dy: number }[]
+  >([]);
 
   const handleStartTimeChange = (value: string | null) => {
     setStartTime(value || dayjs().format('HH:mm'));
@@ -136,6 +144,62 @@ const App = () => {
   const handleDragOver = (e: React.DragEvent<HTMLInputElement>) => {
     e.preventDefault();
   };
+
+  // 감옥 내부 하드코딩된 좌표 범위 (임의로 설정 가능)
+  const JAIL_X_MIN = 45; // 감옥 내부 X 최소 위치
+  const JAIL_X_MAX = 330; // 감옥 내부 X 최대 위치
+  const JAIL_Y_MIN = 570; // 감옥 내부 Y 최소 위치
+  const JAIL_Y_MAX = 810; // 감옥 내부 Y 최대 위치
+
+  // 차단된 사이트 가져오기
+  useEffect(() => {
+    if (!userId) return;
+    const check: checkReq = { user_id: parseInt(userId) };
+    checkBlock(check)
+      .then((response) => {
+        if (response?.sites) {
+          setBlockedSites(response.sites);
+          // 감옥 내부 랜덤한 위치로 아이콘 배치 (하드코딩된 범위 내에서만 생성)
+          setIconPositions(
+            response.sites.map(() => ({
+              x: Math.random() * (JAIL_X_MAX - JAIL_X_MIN) + JAIL_X_MIN,
+              y: Math.random() * (JAIL_Y_MAX - JAIL_Y_MIN) + JAIL_Y_MIN,
+            })),
+          );
+          // 랜덤한 방향으로 초기 속도 설정
+          setIconVelocities(
+            response.sites.map(() => ({
+              dx: (Math.random() - 0.5) * 15, // 속도 조정 가능
+              dy: (Math.random() - 0.5) * 15,
+            })),
+          );
+        }
+      })
+      .catch((error) => console.error('Error fetching blocked sites:', error));
+  }, [userId]);
+  // 아이콘이 감옥 내부에서 움직이도록 애니메이션 설정
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIconPositions((prevPositions) =>
+        prevPositions.map((pos, index) => {
+          const velocity = iconVelocities[index];
+          let newX = pos.x + velocity.dx;
+          let newY = pos.y + velocity.dy;
+          // 감옥 내부 경계 확인 후 반대 방향으로 튕기기
+          if (newX < JAIL_X_MIN || newX > JAIL_X_MAX - 50) {
+            velocity.dx *= -1;
+            newX = Math.max(JAIL_X_MIN, Math.min(newX, JAIL_X_MAX - 50));
+          }
+          if (newY < JAIL_Y_MIN || newY > JAIL_Y_MAX - 50) {
+            velocity.dy *= -1;
+            newY = Math.max(JAIL_Y_MIN, Math.min(newY, JAIL_Y_MAX - 50));
+          }
+          return { x: newX, y: newY };
+        }),
+      );
+    }, 25); // 50ms 간격으로 업데이트
+    return () => clearInterval(interval);
+  }, [iconVelocities]);
 
   return (
     <div className='flex flex-col h-full w-full p-4 items-center gap-2'>
@@ -276,7 +340,34 @@ const App = () => {
             통계 보기
           </button>
         </div>
-        <img src={jail} className='w-full' />
+        {/* 감옥 이미지 */}
+        <img
+          src={jail}
+          style={{
+            width: '90vw',
+            maxWidth: '1000px',
+            height: 'auto',
+            zIndex: 2,
+          }}
+        />
+
+        {/* 아이콘 */}
+        {blockedSites.map((site, index) => (
+          <img
+            key={site}
+            src={`https://www.google.com/s2/favicons?sz=32&domain_url=${site}`}
+            alt={site}
+            style={{
+              position: 'absolute',
+              width: '40px',
+              height: '40px',
+              top: iconPositions[index]?.y || 0,
+              left: iconPositions[index]?.x || 0,
+              cursor: 'pointer',
+              zIndex: 1, // 감옥 아래 배치
+            }}
+          />
+        ))}
       </div>
     </div>
   );
